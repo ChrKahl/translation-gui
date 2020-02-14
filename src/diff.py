@@ -1,8 +1,8 @@
 """A script to complement missing keys in a JSON translationsfile."""
 
-import os
 import json
-from log import log
+from .log import log
+from .getch import getch
 
 
 class Diff():
@@ -44,7 +44,8 @@ class Diff():
     def add_missing_keys(self):
         """Get asked for each key where a value is missing in dst-file."""
         for key in self.dst_missing_keys:
-            i = input("Press n for next or q to quit: ")
+            log("Press n for next or q to quit: ", end='')
+            i = getch()
             if i == "q":
                 log("Additions saved.")
                 return
@@ -60,14 +61,9 @@ class Diff():
         """write the changes in file"""
         if dst_file == "":
             dst_file = self.dst_file
-        with open(dst_file, "w") as file:
-            file.write(json.dumps(self.dst_json))
-
-
-if __name__ == "__main__":
-    DIRNAME = os.path.dirname(__file__)
-    DIFF = Diff(os.path.join(DIRNAME, "../data/de.json"),
-                os.path.join(DIRNAME, "../data/en.json"))
-    DIFF.display_count_keys_not_in_dst()
-    DIFF.add_missing_keys()
-    DIFF.write_dst_file(os.path.join(DIRNAME, "../data/en1.json"))
+        try:
+            with open(dst_file, "w+") as file:
+                file.write(json.dumps(self.dst_json))
+            log(f"Wrote file to {dst_file}")
+        except FileNotFoundError:
+            log(f"Could not write file to {dst_file}")
