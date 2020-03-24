@@ -41,25 +41,28 @@ class Diff():
         """Logging missing keys of destination file."""
         log(self.dst_missing_keys)
 
-    def add_missing_keys(self):
+    def add_missing_keys(self, auto=False):
         """Get asked for each key where a value is missing in dst-file."""
         for key in self.dst_missing_keys:
-            log("Press n for next or q to quit: ", end='')
-            i = getch()
-            if i == "q":
-                log("Additions saved.")
-                return
-            if i == "n":
-                log("Insert translation for (Press x to use source-value):")
-                log(f"Key: {key}", 1)
-                log(f"Value: {self.src_json[key]}", 1)
-                value = input("\t")
-                if value == "x":
-                    self.dst_json[key] = self.src_json[key]
-                else:
-                    self.dst_json[key] = value
+            if auto:
+                self.dst_json[key] = self.src_json[key]
+            else:
+                log("Press n for next or q to quit: ", end='')
+                i = getch()
+                if i == "q":
+                    log("Additions saved.")
+                    return
+                if i == "n":
+                    log("Insert translation for (Press x to use source-value):")
+                    log(f"Key: {key}", 1)
+                    log(f"Value: {self.src_json[key]}", 1)
+                    value = input("\t")
+                    if value == "x":
+                        self.dst_json[key] = self.src_json[key]
+                    else:
+                        self.dst_json[key] = value
 
-                self.dst_missing_keys.remove(key)
+                    self.dst_missing_keys.remove(key)
 
     def write_dst_file(self, dst_file=""):
         """write the changes in file"""
