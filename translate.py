@@ -16,6 +16,9 @@ if __name__ == '__main__':
     parser.add_argument(
         'dst_file', metavar='dst_file', type=str,
         help='Specify a destination file where translations are missing.')
+    parser.add_argument(
+        '--out', type=str,
+        help='Specify a destination file where translations are missing.')
     ARGS = parser.parse_args()
     DIRNAME = os.path.dirname(__file__)
     DIFF = diff.Diff(ARGS.src_file, ARGS.dst_file)

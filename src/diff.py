@@ -70,7 +70,7 @@ class Diff():
             dst_file = self.dst_file
         try:
             with open(dst_file, "w+") as file:
-                file.write(json.dumps(self.dst_json, indent=2, sort_keys=True))
+                file.write(json.dumps(self.dst_json, indent=2, sort_keys=True, ensure_ascii=False))
             log(f"Wrote file to {dst_file}")
         except FileNotFoundError:
             log(f"Could not write file to {dst_file}")
