@@ -50,11 +50,15 @@ class Diff():
                 log("Additions saved.")
                 return
             if i == "n":
-                log("Insert translation for:")
+                log("Insert translation for (Press x to use source-value):")
                 log(f"Key: {key}", 1)
                 log(f"Value: {self.src_json[key]}", 1)
                 value = input("\t")
-                self.dst_json[key] = value
+                if value == "x":
+                    self.dst_json[key] = self.src_json[key]
+                else:
+                    self.dst_json[key] = value
+
                 self.dst_missing_keys.remove(key)
 
     def write_dst_file(self, dst_file=""):
