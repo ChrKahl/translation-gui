@@ -13,7 +13,7 @@ Manually add values only for missing keys that are in src-file but not in dst-fi
 Automatically add key-values that are not in dst-file.
 
 ```bash
-./translate.py <src-file-path> <dst-file-path>
+./translate.py --auto <src-file-path> <dst-file-path>
 ```
 
 To find differences between src-file and dst-file and select for each value which to use.
