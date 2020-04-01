@@ -1,6 +1,7 @@
 """A script to complement missing keys in a JSON translationsfile."""
 
 import json
+import sys
 from .log import log
 from .getch import getch
 
@@ -8,10 +9,11 @@ from .getch import getch
 class Diff():
     """A script to complement missing keys in a JSON translationsfile."""
 
-    def __init__(self, src_file, dst_file):
+    def __init__(self, src_file, dst_file, out):
         self.dst_missing_keys = []
         self.src_file = src_file
         self.dst_file = dst_file
+        self.out = out
 
         with open(self.src_file, "r") as file:
             src_string = file.read()
@@ -64,13 +66,54 @@ class Diff():
 
                     self.dst_missing_keys.remove(key)
 
-    def write_dst_file(self, dst_file=""):
+    def compare_keys(self):
+        """
+        compare values of same keys and let the
+        user decide which one should be added
+        """
+        new_json = json.loads('{}')
+        for key in self.src_keys:
+            if key in self.dst_keys:
+                if self.dst_json[key] != self.src_json[key]:
+                    log("")
+                    log(f"Key: {key}", 1)
+                    log(f"SRC-Value(1): {self.src_json[key]}", 2)
+                    log(f"DST-Value(2): {self.dst_json[key]}", 2)
+                    i = getch()
+                    if i == "1":
+                        new_json[key] = self.src_json[key]
+                        log(f"[src] {self.src_json[key]} written for {key}.")
+                    elif i == "2":
+                        new_json[key] = self.dst_json[key]
+                        log(f"[dst] {self.dst_json[key]} written for {key}.")
+                    else:
+                        new_file = json.dumps(new_json, indent=2, sort_keys=True, ensure_ascii=False)
+                        log(new_file)
+                        sys.exit(0)
+                else:
+                    # log(f"[src] Values for key: {key} doesn't differ.")
+                    new_json[key] = self.src_json[key]
+            else:
+                log(f"[src] Key: {key} is only in source-file. Writing it.")
+                new_json[key] = self.src_json[key]
+
+        for key in self.dst_keys:
+            if key not in new_json:
+                log(f"[dst] Added Value from destination-file for key: {key}", 2)
+                new_json[key] = self.dst_json[key]
+
+        self.write_file(new_json)
+
+    def write_file(self, out_json=None):
         """write the changes in file"""
-        if dst_file == "":
-            dst_file = self.dst_file
+        json_to_write = out_json or self.dst_json
         try:
-            with open(dst_file, "w+") as file:
-                file.write(json.dumps(self.dst_json, indent=2, sort_keys=True, ensure_ascii=False))
-            log(f"Wrote file to {dst_file}")
+            with open(self.out, "w+") as file:
+                file.write(
+                    json.dumps(json_to_write,
+                               indent=2,
+                               sort_keys=True,
+                               ensure_ascii=False))
+            log(f"Wrote file to {self.out}")
         except FileNotFoundError:
-            log(f"Could not write file to {dst_file}")
+            log(f"Could not write file to {self.out}")

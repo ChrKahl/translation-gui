@@ -20,6 +20,9 @@ Currently there's a commandline tool available which gets the missing keys from 
   * dst-file storage-location
 * check if there are childnodes
 * improve UI
+* autoremove duplicate keys with same values
+* sort alphabetically
+
 
 ### For GUI
 
