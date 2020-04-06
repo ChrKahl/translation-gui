@@ -4,6 +4,12 @@
 
 Currently there's a commandline tool available which gets the missing keys from one file to another.
 
+Make the script executable
+
+```bash
+chmod u+x ./translate.py
+```
+
 Manually add values only for missing keys that are in src-file but not in dst-file.
 
 ```bash
