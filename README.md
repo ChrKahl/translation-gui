@@ -35,12 +35,13 @@ Write to out-file-path (Default: `./data/out/out.json`)
 
 ### For commandline
 
-- [  ] offer more arguments via command line
-  - [  ] dst-file storage-location
-- [  ] check if there are childnodes
-- [  ] improve UI
-- [  ] autoremove duplicate keys with same values
-- [  ] sort alphabetically
+- [ ] offer more arguments via command line
+  - [ ] dst-file storage-location
+- [ ] check if there are childnodes
+- [ ] improve UI
+- [ ] autoremove duplicate keys with same values
+- [ ] sort alphabetically
+- [ ] `./data/out`-folder is not created initially
 
 
 ### For GUI
